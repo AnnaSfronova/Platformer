@@ -2,13 +2,12 @@ using UnityEngine;
 
 [RequireComponent(typeof(InputReader))]
 [RequireComponent(typeof(PlayerMover))]
-[RequireComponent(typeof(GroundDetector))]
 [RequireComponent(typeof(PlayerAnimator))]
 public class Player : MonoBehaviour
 {
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private PlayerMover _playerMover;
-    [SerializeField] private GroundDetector _groundDetector;
+    [SerializeField] private GroundChecker _groundChecker;
     [SerializeField] private PlayerAnimator _playerAnimator;
 
     private void OnEnable()
@@ -37,7 +36,7 @@ public class Player : MonoBehaviour
 
     private void TryJump()
     {
-        if (_groundDetector.IsGround)
+        if (_groundChecker.IsGround())
             _playerMover.Jump();
     }
 
@@ -59,7 +58,7 @@ public class Player : MonoBehaviour
 
     private void TryPlayJump()
     {
-        if (_groundDetector.IsGround == false)
+        if (_groundChecker.IsGround() == false)
             _playerAnimator.PlayJump(true);
         else
             _playerAnimator.PlayJump(false);

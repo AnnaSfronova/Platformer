@@ -4,8 +4,7 @@ using UnityEngine;
 public class InputReader : MonoBehaviour
 {
     private const string Horizontal = "Horizontal";
-
-    private KeyCode _jumpKey = KeyCode.Space;
+    private const KeyCode _jumpKey = KeyCode.Space;
 
     public event Action Jumped;
 
