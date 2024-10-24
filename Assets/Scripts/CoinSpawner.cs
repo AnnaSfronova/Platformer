@@ -4,14 +4,14 @@ using UnityEngine.Pool;
 
 public class CoinSpawner : MonoBehaviour
 {
-    [SerializeField] private Coin _coinPrefab;
+    [SerializeField] private Coin _prefab;
 
     private ObjectPool<Coin> _pool;
 
     private void Awake()
     {
         _pool = new ObjectPool<Coin>(
-            createFunc: () => Instantiate(_coinPrefab),
+            createFunc: () => Instantiate(_prefab),
             actionOnGet: (coin) => OnGet(coin),
             actionOnRelease: (coin) => coin.gameObject.SetActive(false),
             defaultCapacity: 5,
@@ -26,13 +26,13 @@ public class CoinSpawner : MonoBehaviour
 
     private void OnGet(Coin coin)
     {
-        coin.CoinRelease += OnRelease;
+        coin.Released += OnRelease;
         coin.Init(transform.position);
     }
 
     private void OnRelease(Coin coin)
     {
-        coin.CoinRelease -= OnRelease;
+        coin.Released -= OnRelease;
         _pool.Release(coin);
     }
 

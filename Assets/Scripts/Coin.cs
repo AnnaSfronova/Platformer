@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-    public event Action<Coin> CoinRelease;
+    public event Action<Coin> Released;
 
     public void Init(Vector3 position)
     {
@@ -11,9 +11,8 @@ public class Coin : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void ReturnToPool()
     {
-        if (collision.gameObject.TryGetComponent<Player>(out _))
-            CoinRelease?.Invoke(this);
+        Released?.Invoke(this);
     }
 }

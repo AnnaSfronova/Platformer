@@ -1,34 +1,30 @@
 using UnityEngine;
 
 [RequireComponent(typeof(EnemyMover))]
-[RequireComponent(typeof(EnemyAnimator))]
 [RequireComponent(typeof(EnemyTarget))]
+[RequireComponent(typeof(EnemyAnimator))]
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private EnemyMover _enemyMover;
-    [SerializeField] private EnemyAnimator _enemyAnimator;
-    [SerializeField] private EnemyTarget _enemyTarget;
+    [SerializeField] private EnemyMover _mover;
+    [SerializeField] private EnemyTarget _target;
+    [SerializeField] private EnemyAnimator _animator;
 
     private void FixedUpdate()
     {
         TryChangeTarget();
         TryFlip();
 
-        _enemyMover.Move(_enemyTarget.Target);
+        _mover.Move(_target.Target);
     }
 
     private void TryChangeTarget()
     {
-        if (transform.position == _enemyTarget.Target.position)
-            _enemyTarget.ChangePoint();
+        if (transform.position == _target.Target.position)
+            _target.ChangePoint();
     }
 
     private void TryFlip()
     {
-        if (transform.position.x > _enemyTarget.Target.position.x)
-            _enemyAnimator.Flip(true);
-
-        else
-            _enemyAnimator.Flip(false);
+        _animator.Flip(transform.position.x > _target.Target.position.x);
     }
 }

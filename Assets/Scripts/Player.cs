@@ -3,21 +3,24 @@ using UnityEngine;
 [RequireComponent(typeof(InputReader))]
 [RequireComponent(typeof(PlayerMover))]
 [RequireComponent(typeof(PlayerAnimator))]
+[RequireComponent(typeof(CollisionChecker))]
 public class Player : MonoBehaviour
 {
     [SerializeField] private InputReader _inputReader;
-    [SerializeField] private PlayerMover _playerMover;
-    [SerializeField] private GroundChecker _groundChecker;
-    [SerializeField] private PlayerAnimator _playerAnimator;
+    [SerializeField] private PlayerMover _mover;
+    [SerializeField] private PlayerAnimator _animator;
+    [SerializeField] private CollisionChecker _collisionChecker;
 
     private void OnEnable()
     {
         _inputReader.Jumped += TryJump;
+        _collisionChecker.Gathered += GatherCoin;
     }
 
     private void OnDisable()
     {
         _inputReader.Jumped -= TryJump;
+        _collisionChecker.Gathered -= GatherCoin;
     }
 
     private void FixedUpdate()
@@ -31,36 +34,35 @@ public class Player : MonoBehaviour
     private void TryMove()
     {
         if (_inputReader.Direction != 0)
-            _playerMover.Move(_inputReader.Direction);
+            _mover.Move(_inputReader.Direction);
     }
 
     private void TryJump()
     {
-        if (_groundChecker.IsGround())
-            _playerMover.Jump();
+        if (_collisionChecker.IsGround())
+            _mover.Jump();
     }
 
     private void TryFlip()
     {
         if (_inputReader.Direction > 0.1f)
-            _playerAnimator.Flip(false);
+            _animator.Flip(false);
         else if (_inputReader.Direction < -0.1f)
-            _playerAnimator.Flip(true);
+            _animator.Flip(true);
     }
 
     private void TryPlayRun()
     {
-        if (_inputReader.Direction != 0)
-            _playerAnimator.PlayRun(true);
-        else
-            _playerAnimator.PlayRun(false);
+        _animator.PlayRun(_inputReader.Direction != 0);
     }
 
     private void TryPlayJump()
     {
-        if (_groundChecker.IsGround() == false)
-            _playerAnimator.PlayJump(true);
-        else
-            _playerAnimator.PlayJump(false);
+        _animator.PlayJump(_collisionChecker.IsGround() == false);
+    }
+
+    private void GatherCoin(Coin coin)
+    {
+        coin.ReturnToPool();        
     }
 }
