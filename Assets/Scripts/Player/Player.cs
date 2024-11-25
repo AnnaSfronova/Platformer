@@ -3,12 +3,14 @@ using UnityEngine;
 [RequireComponent(typeof(InputReader))]
 [RequireComponent(typeof(PlayerMover))]
 [RequireComponent(typeof(PlayerAnimator))]
+[RequireComponent(typeof(Flipper))]
 [RequireComponent(typeof(CollisionChecker))]
 public class Player : MonoBehaviour
 {
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private PlayerMover _mover;
     [SerializeField] private PlayerAnimator _animator;
+    [SerializeField] private Flipper _flipper;
     [SerializeField] private CollisionChecker _collisionChecker;
 
     private void OnEnable()
@@ -46,9 +48,9 @@ public class Player : MonoBehaviour
     private void TryFlip()
     {
         if (_inputReader.Direction > 0.1f)
-            _animator.Flip(false);
+            _flipper.Flip(false);
         else if (_inputReader.Direction < -0.1f)
-            _animator.Flip(true);
+            _flipper.Flip(true);
     }
 
     private void TryPlayRun()
@@ -63,6 +65,6 @@ public class Player : MonoBehaviour
 
     private void GatherCoin(Coin coin)
     {
-        coin.ReturnToPool();        
+        coin.Gather();
     }
 }

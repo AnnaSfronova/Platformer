@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -42,7 +43,7 @@ public class CoinSpawner : MonoBehaviour
 
         WaitForSeconds wait = new(delay);
 
-        while (true)
+        while (enabled)
         {
             _pool.Get();
             yield return wait;

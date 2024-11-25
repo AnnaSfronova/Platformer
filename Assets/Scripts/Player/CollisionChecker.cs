@@ -9,12 +9,12 @@ public class CollisionChecker : MonoBehaviour
 
     public event Action<Coin> Gathered;
 
-    public bool IsGround() =>
-        Physics2D.OverlapCircle(transform.position, _radius, _groundMask);
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.TryGetComponent(out Coin coin))
             Gathered?.Invoke(coin);
     }
+
+    public bool IsGround() =>
+        Physics2D.OverlapCircle(transform.position, _radius, _groundMask);
 }

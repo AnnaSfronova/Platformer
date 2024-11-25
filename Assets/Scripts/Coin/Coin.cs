@@ -11,7 +11,7 @@ public class Coin : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    public void ReturnToPool()
+    public void Gather()
     {
         Released?.Invoke(this);
     }
