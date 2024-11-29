@@ -5,6 +5,7 @@ public class PlayerAnimator : MonoBehaviour
 {
     private const string AnimationRun = "isRun";
     private const string AnimationJump = "isJump";
+    private const string AnimationAttack = "isAttack";
 
     private Animator _animator;
 
@@ -21,5 +22,10 @@ public class PlayerAnimator : MonoBehaviour
     public void PlayJump(bool value)
     {
         _animator.SetBool(AnimationJump, value);
+    }
+
+    public void PlayAttack()
+    {
+        _animator.SetTrigger(AnimationAttack);
     }
 }

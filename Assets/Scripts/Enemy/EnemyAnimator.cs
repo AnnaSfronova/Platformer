@@ -16,4 +16,5 @@ public class EnemyAnimator : MonoBehaviour
     }
 
     public string AnimationRun => "isRun";
+    public string AnimationAttack => "isAttack";
 }

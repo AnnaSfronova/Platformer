@@ -20,6 +20,6 @@ public class EnemyStateIdle : EnemyState
     private void TryFinish()
     {
         if (Time.time >= _startTime + _idleTime)
-            _enemy.SetState(_enemy.StatePatrol);
+            _enemy.StateMachine.SetState(_enemy.StateMachine.StatePatrol);
     }
 }

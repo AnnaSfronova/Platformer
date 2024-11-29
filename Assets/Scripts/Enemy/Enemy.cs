@@ -1,43 +1,37 @@
 using UnityEngine;
 
+[RequireComponent(typeof(EnemyStateMachine))]
 [RequireComponent(typeof(EnemyAnimator))]
 [RequireComponent(typeof(Flipper))]
+[RequireComponent(typeof(Health))]
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private PathPatrol _path;
+    [SerializeField] private Health _health;
 
-    private EnemyState _currentState;
+    private float _currentPosition;
+    private float _previousPosition;
 
-    public EnemyStateIdle StateIdle { get; private set; }
-    public EnemyStatePatrol StatePatrol { get; private set; }
-
+    public EnemyStateMachine StateMachine { get; private set; }
     public EnemyAnimator Animator { get; private set; }
-    public Flipper Flipper { get; private set; }
 
     private void Awake()
     {
+        StateMachine = GetComponent<EnemyStateMachine>();
         Animator = GetComponent<EnemyAnimator>();
-        Flipper = GetComponent<Flipper>();
+
+        _currentPosition = transform.position.x;
+        _previousPosition = _currentPosition;
+
+        _health.Died += Die;
     }
 
-    private void Start()
+    public void TakeDamage(int damage)
     {
-        StateIdle = new EnemyStateIdle(this);
-        StatePatrol = new EnemyStatePatrol(this, _path);
-
-        _currentState = StatePatrol;
-        _currentState.Enter();
+        _health.TakeDamage(damage);
     }
 
-    private void Update()
+    private void Die()
     {
-        _currentState.Update();
-    }
-
-    public void SetState(EnemyState state)
-    {
-        _currentState.Exit();
-        _currentState = state;
-        _currentState.Enter();
+        gameObject.SetActive(false);
     }
 }

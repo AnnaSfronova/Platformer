@@ -23,7 +23,7 @@ public class EnemyStatePatrol : EnemyState
     public override void Update()
     {
         TryStop();
-        TryChangePoint();        
+        TryChangePoint();
         Move();
     }
 
@@ -40,7 +40,7 @@ public class EnemyStatePatrol : EnemyState
     private void TryStop()
     {
         if (_enemy.transform.position == _path.StopPoint.position)
-            _enemy.SetState(_enemy.StateIdle);
+            _enemy.StateMachine.SetState(_enemy.StateMachine.StateIdle);
     }
 
     private void TryChangePoint()
@@ -49,13 +49,6 @@ public class EnemyStatePatrol : EnemyState
         {
             _currentPoint = ++_currentPoint % _path.Length;
             _target = _path.GetPointTranform(_currentPoint);
-
-            TryFlip();
         }
-    }
-
-    private void TryFlip()
-    {
-        _enemy.Flipper.Flip(_enemy.transform.position.x > _target.position.x);
     }
 }
