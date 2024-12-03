@@ -45,6 +45,6 @@ public class EnemyStateChase : EnemyState
 
     private bool IsNotStopPoint()
     {
-        return _enemy.transform.position.x > _pointA.position.x || _enemy.transform.position.x < _pointB.position.x;
+        return _enemy.transform.position.x > _pointA.position.x && _enemy.transform.position.x < _pointB.position.x;
     }
 }

@@ -6,6 +6,7 @@ public class PlayerAnimator : MonoBehaviour
     private const string AnimationRun = "isRun";
     private const string AnimationJump = "isJump";
     private const string AnimationAttack = "isAttack";
+    private const string AnimationHit = "isHit";
 
     private Animator _animator;
 
@@ -27,5 +28,10 @@ public class PlayerAnimator : MonoBehaviour
     public void PlayAttack()
     {
         _animator.SetTrigger(AnimationAttack);
+    }
+
+    public void PlayHit()
+    {
+        _animator.SetTrigger(AnimationHit);
     }
 }

@@ -27,6 +27,7 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        Animator.PlayTriggerAnimation(Animator.AnimationHit);
         _health.TakeDamage(damage);
     }
 

@@ -16,7 +16,7 @@ public class EnemyStatePatrol : EnemyState
     }
 
     public override void Enter()
-    {
+    {        
         _enemy.Animator.PlayAnimation(_animation, true);
     }
 

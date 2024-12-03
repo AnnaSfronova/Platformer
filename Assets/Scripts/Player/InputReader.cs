@@ -22,7 +22,7 @@ public class InputReader : MonoBehaviour
         if(Input.GetKeyDown(JumpKey))
             _isJump = true;
 
-        if (Input.GetMouseButton(MouseButton))
+        if (Input.GetMouseButtonDown(MouseButton))
             _isAttack = true;
     }
 
@@ -36,7 +36,6 @@ public class InputReader : MonoBehaviour
 
         if(_isAttack)
         {
-            Debug.Log("ATTACK");
             Attacked?.Invoke();
             _isAttack = false;
         }

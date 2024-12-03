@@ -15,6 +15,13 @@ public class EnemyAnimator : MonoBehaviour
         _animator.SetBool(name, value);
     }
 
+    public void PlayTriggerAnimation(string name)
+    {
+        _animator.SetTrigger(name);
+    }
+
     public string AnimationRun => "isRun";
     public string AnimationAttack => "isAttack";
+    public string AnimationHit => "isHit";
+
 }

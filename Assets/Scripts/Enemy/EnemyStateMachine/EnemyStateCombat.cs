@@ -3,7 +3,7 @@ using UnityEngine;
 public class EnemyStateCombat : EnemyState
 {
     private Player _player;
-    private int _damage = 0;
+    private int _damage = 10;
     private string _animation;
     private float _startTime;
     private float _attackDelay = 0.5f;

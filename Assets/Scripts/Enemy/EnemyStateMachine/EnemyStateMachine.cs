@@ -42,8 +42,10 @@ public class EnemyStateMachine : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.TryGetComponent(out Player player))
+        if (collision.gameObject.TryGetComponent(out Player player) && _area.HasPlayer)
             SetStateChase(player);
+        else
+            SetStatePatrol();
     }
 
     public void SetState(EnemyState state)

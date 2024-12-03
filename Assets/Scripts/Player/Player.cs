@@ -42,6 +42,7 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        _animator.PlayHit();
         _health.TakeDamage(damage);
     }
 
