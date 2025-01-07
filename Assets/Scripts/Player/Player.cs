@@ -1,43 +1,31 @@
 using UnityEngine;
+using UnityEngine.Windows;
 
 [RequireComponent(typeof(InputReader))]
 [RequireComponent(typeof(PlayerMover))]
 [RequireComponent(typeof(PlayerAnimator))]
 [RequireComponent(typeof(Flipper))]
-[RequireComponent(typeof(CollisionChecker))]
 [RequireComponent(typeof(Health))]
 public class Player : MonoBehaviour
 {
-    [SerializeField] private InputReader _inputReader;
+    [SerializeField] private InputReader _input;
     [SerializeField] private PlayerMover _mover;
     [SerializeField] private PlayerAnimator _animator;
-    [SerializeField] private CollisionChecker _collisionChecker;
+    [SerializeField] private CollisionChecker _checker;
     [SerializeField] private Health _health;
 
     private int _damage = 10;
 
     private void OnEnable()
     {
-        _inputReader.Jumped += TryJump;
-        _inputReader.Attacked += TryAttack;
-        _collisionChecker.GatheredCoin += GatherCoin;
-        _collisionChecker.GatheredKit += GatherKit;
-        _health.Died += Die;
+        _input.Attacked += TryAttack;
+        _health.Changed += Die;
     }
 
     private void OnDisable()
     {
-        _inputReader.Jumped -= TryJump;
-        _inputReader.Attacked -= TryAttack;
-        _collisionChecker.GatheredCoin -= GatherCoin;
-        _collisionChecker.GatheredKit -= GatherKit;
-        _health.Died -= Die;
-    }
-
-    private void FixedUpdate()
-    {
-        TryMove();
-        TryPlayAnimation();
+        _input.Attacked -= TryAttack;
+        _health.Changed -= Die;
     }
 
     public void TakeDamage(int damage)
@@ -46,48 +34,20 @@ public class Player : MonoBehaviour
         _health.TakeDamage(damage);
     }
 
-    private void TryMove()
-    {
-        if (_inputReader.Direction != 0)
-            _mover.Move(_inputReader.Direction);
-    }
-
-    private void TryJump()
-    {
-        if (_collisionChecker.IsGround())
-            _mover.Jump();
-    }
-
     private void TryAttack()
     {
         _animator.PlayAttack();
 
-        if (_collisionChecker.Enemy != null && _collisionChecker.IsGround())
+        if (_checker.Enemy != null && _checker.IsGround())
         {
-            Enemy enemy = _collisionChecker.Enemy;
-            enemy.TakeDamage(_damage);            
+            Enemy enemy = _checker.Enemy;
+            enemy.TakeDamage(_damage);
         }
     }
 
-    private void GatherCoin(Coin coin)
+    private void Die(int health)
     {
-        coin.Gather();
-    }
-
-    private void GatherKit(MedicineKit kit)
-    {
-        _health.TakeHeal(kit.Heal);
-        kit.Die();
-    }
-
-    private void TryPlayAnimation()
-    {
-        _animator.PlayRun(_inputReader.Direction != 0);
-        _animator.PlayJump(_collisionChecker.IsGround() == false);
-    }
-
-    private void Die()
-    {
-        gameObject.SetActive(false);
+        if (health <= 0)
+            gameObject.SetActive(false);
     }
 }

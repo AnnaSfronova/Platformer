@@ -1,35 +1,48 @@
 using System;
 using UnityEngine;
 
+[RequireComponent(typeof(Health))]
 public class CollisionChecker : MonoBehaviour
 {
-    [SerializeField] private LayerMask _groundMask;
+    private const string MaskGround = "Ground";
 
+    private Health _health;
+    private LayerMask _groundMask;
     private float _radius = 0.6f;
 
     public Enemy Enemy { get; private set; }
 
-    public event Action<Coin> GatheredCoin;
-    public event Action<MedicineKit> GatheredKit;
+    private void Awake()
+    {
+        _health = GetComponent<Health>();
+        _groundMask = LayerMask.GetMask(MaskGround);
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.TryGetComponent(out Coin coin))
-            GatheredCoin?.Invoke(coin);
+        if (collision.gameObject.TryGetComponent(out ICollectable collectable) == false)
+            return;
 
-        if (collision.gameObject.TryGetComponent(out MedicineKit kit))
-            GatheredKit?.Invoke(kit);
+        if (collectable is Coin coin)
+        {
+            coin.Collect();
+        }
+        else if (collectable is MedicineKit kit)
+        {
+            _health.TakeHeal(kit.Heal);
+            kit.Collect();
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.TryGetComponent(out Enemy enemy))
+        if (collision.TryGetComponent(out Enemy enemy))
             Enemy = enemy;
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.TryGetComponent(out Enemy enemy))
+        if (collision.TryGetComponent(out Enemy enemy))
             Enemy = null;
     }
 

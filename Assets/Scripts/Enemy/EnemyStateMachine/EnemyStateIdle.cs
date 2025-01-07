@@ -5,7 +5,7 @@ public class EnemyStateIdle : EnemyState
     private float _startTime;
     private float _idleTime = 2f;
 
-    public EnemyStateIdle(Enemy enemy) : base(enemy) { }
+    public EnemyStateIdle(Enemy enemy, IStateMachine stateMachine) : base(enemy, stateMachine) { }
 
     public override void Enter()
     {
@@ -20,6 +20,6 @@ public class EnemyStateIdle : EnemyState
     private void TryFinish()
     {
         if (Time.time >= _startTime + _idleTime)
-            _enemy.StateMachine.SetState(_enemy.StateMachine.StatePatrol);
+            StateMachine.ChangeState(typeof(EnemyStatePatrol));
     }
 }

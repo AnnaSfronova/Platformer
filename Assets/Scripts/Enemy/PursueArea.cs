@@ -12,14 +12,14 @@ public class PursueArea : MonoBehaviour
     public Transform PointA => _pointA;
     public Transform PointB => _pointB;
 
-    public event Action<Player> IntruderIn;
-    public event Action IntruderOut;
+    public event Action<Type> IntruderIn;
+    public event Action<Type> IntruderOut;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.TryGetComponent(out Player player))
+        if (collision.gameObject.TryGetComponent<Player>(out _))
         {
-            IntruderIn?.Invoke(player);
+            IntruderIn?.Invoke(typeof(EnemyStateChase));
             _hasPlayer = true;
         }
     }
@@ -28,7 +28,7 @@ public class PursueArea : MonoBehaviour
     {
         if (collision.gameObject.TryGetComponent<Player>(out _))
         {
-            IntruderOut?.Invoke();
+            IntruderOut?.Invoke(typeof(EnemyStateIdle));
             _hasPlayer = false;
         }
     }

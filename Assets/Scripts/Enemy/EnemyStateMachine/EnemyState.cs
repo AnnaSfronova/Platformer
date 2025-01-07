@@ -1,11 +1,14 @@
 public abstract class EnemyState
 {
-    protected Enemy _enemy;
+    protected Enemy Enemy;
+    protected IStateMachine StateMachine;
 
-    public EnemyState(Enemy enemy)
+    public EnemyState(Enemy enemy, IStateMachine stateMachine)
     {
-        _enemy = enemy;
+        Enemy = enemy;
+        StateMachine = stateMachine;
     }
+
     public virtual void Enter() { }
     public virtual void Update() { }
     public virtual void Exit() { }

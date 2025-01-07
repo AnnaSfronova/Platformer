@@ -1,32 +1,35 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyStateMachine : MonoBehaviour
+public class EnemyStateMachine : MonoBehaviour, IStateMachine
 {
     [SerializeField] private Enemy _enemy;
+    [SerializeField] private Player _player;
     [SerializeField] private PathPatrol _path;
     [SerializeField] private PursueArea _area;
 
+    private Dictionary<Type, EnemyState> _states = new();
     private EnemyState _currentState;
-
-    public EnemyStateIdle StateIdle { get; private set; }
-    public EnemyStatePatrol StatePatrol { get; private set; }
 
     private void Start()
     {
-        StateIdle = new EnemyStateIdle(_enemy);
-        StatePatrol = new EnemyStatePatrol(_enemy, _path);
+        _states.Add(typeof(EnemyStateIdle), new EnemyStateIdle(_enemy, this));
+        _states.Add(typeof(EnemyStatePatrol), new EnemyStatePatrol(_enemy, this, _path));
+        _states.Add(typeof(EnemyStateChase), new EnemyStateChase(_enemy, this, _player, _area));
+        _states.Add(typeof(EnemyStateCombat), new EnemyStateCombat(_enemy, this, _player));
 
-        _currentState = StatePatrol;
+        _states.TryGetValue(typeof(EnemyStatePatrol), out _currentState);
         _currentState.Enter();
 
-        _area.IntruderIn += SetStateChase;
-        _area.IntruderOut += SetStatePatrol;
+        _area.IntruderIn += ChangeState;
+        _area.IntruderOut += ChangeState;
     }
 
     private void OnDisable()
     {
-        _area.IntruderIn -= SetStateChase;
-        _area.IntruderOut -= SetStatePatrol;
+        _area.IntruderIn -= ChangeState;
+        _area.IntruderOut -= ChangeState;
     }
 
     private void Update()
@@ -36,32 +39,22 @@ public class EnemyStateMachine : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.TryGetComponent(out Player player))
-            SetState(new EnemyStateCombat(_enemy, player));
+        if (collision.gameObject.TryGetComponent<Player>(out _))
+            ChangeState(typeof(EnemyStateCombat));
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.TryGetComponent(out Player player) && _area.HasPlayer)
-            SetStateChase(player);
+        if (collision.gameObject.TryGetComponent<Player>(out _) && _area.HasPlayer)
+            ChangeState(typeof(EnemyStateChase));
         else
-            SetStatePatrol();
+            ChangeState(typeof(EnemyStatePatrol));
     }
 
-    public void SetState(EnemyState state)
+    public void ChangeState(Type type)
     {
         _currentState.Exit();
-        _currentState = state;
+        _currentState = _states[type];
         _currentState.Enter();
-    }
-
-    private void SetStateChase(Player player)
-    {
-        SetState(new EnemyStateChase(_enemy, player, _area));
-    }
-
-    private void SetStatePatrol()
-    {
-        SetState(StatePatrol);
     }
 }

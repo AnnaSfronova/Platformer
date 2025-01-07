@@ -8,15 +8,15 @@ public class EnemyStateCombat : EnemyState
     private float _startTime;
     private float _attackDelay = 0.5f;
 
-    public EnemyStateCombat(Enemy enemy, Player player) : base(enemy)
+    public EnemyStateCombat(Enemy enemy, IStateMachine stateMachine, Player player) : base(enemy, stateMachine)
     {
         _player = player;
-        _animation = _enemy.Animator.AnimationAttack;
+        _animation = Enemy.Animator.Attack;
     }
 
     public override void Enter()
     {
-        _enemy.Animator.PlayAnimation(_animation, true);
+        Enemy.Animator.PlayAnimation(_animation, true);
         _startTime = Time.time;
     }
 
@@ -31,7 +31,7 @@ public class EnemyStateCombat : EnemyState
 
     public override void Exit()
     {
-        _enemy.Animator.PlayAnimation(_animation, false);
+        Enemy.Animator.PlayAnimation(_animation, false);
     }
 
     private bool IsTimeAttack()

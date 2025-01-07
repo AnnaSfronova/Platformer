@@ -1,16 +1,38 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(InputReader))]
+[RequireComponent(typeof(CollisionChecker))]
 public class PlayerMover : MonoBehaviour
 {
-    [SerializeField] private float _speed;
-    [SerializeField] private float _jumpForce;
+    private float _speed = 6f;
+    private float _jumpForce = 18f;
 
     private Rigidbody2D _rigidbody;
+    private InputReader _input;
+    private CollisionChecker _checker;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+        _input = GetComponent<InputReader>();
+        _checker = GetComponent<CollisionChecker>();
+    }
+
+    private void OnEnable()
+    {
+        _input.Jumped += Jump;
+    }
+
+    private void FixedUpdate()
+    {
+        if (_input.Direction != 0)
+            Move(_input.Direction);
+    }
+
+    private void OnDisable()
+    {
+        _input.Jumped -= Jump;
     }
 
     public void Move(float directionX)
@@ -20,6 +42,7 @@ public class PlayerMover : MonoBehaviour
 
     public void Jump()
     {
-        _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, _jumpForce);
+        if (_checker.IsGround())        
+            _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, _jumpForce);        
     }
 }

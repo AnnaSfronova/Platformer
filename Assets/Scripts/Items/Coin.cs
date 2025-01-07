@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Coin : MonoBehaviour
+public class Coin : MonoBehaviour, ICollectable
 {
     public event Action<Coin> Released;
 
@@ -11,7 +11,7 @@ public class Coin : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    public void Gather()
+    public void Collect()
     {
         Released?.Invoke(this);
     }

@@ -1,38 +1,40 @@
 using UnityEngine;
 
-[RequireComponent(typeof(EnemyStateMachine))]
-[RequireComponent(typeof(EnemyAnimator))]
-[RequireComponent(typeof(Flipper))]
-[RequireComponent(typeof(Health))]
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private Health _health;
+    [SerializeField] private EnemyAnimator _animator;
 
     private float _currentPosition;
     private float _previousPosition;
 
-    public EnemyStateMachine StateMachine { get; private set; }
-    public EnemyAnimator Animator { get; private set; }
+    public EnemyAnimator Animator => _animator;
 
     private void Awake()
     {
-        StateMachine = GetComponent<EnemyStateMachine>();
-        Animator = GetComponent<EnemyAnimator>();
-
         _currentPosition = transform.position.x;
         _previousPosition = _currentPosition;
+    }
 
-        _health.Died += Die;
+    private void OnEnable()
+    {
+        _health.Changed += Die;
+    }
+
+    private void OnDisable()
+    {
+        _health.Changed -= Die;
     }
 
     public void TakeDamage(int damage)
     {
-        Animator.PlayTriggerAnimation(Animator.AnimationHit);
+        Animator.PlayTriggerAnimation(Animator.Hit);
         _health.TakeDamage(damage);
     }
 
-    private void Die()
+    private void Die(int health)
     {
-        gameObject.SetActive(false);
+        if (health <= 0)
+            gameObject.SetActive(false);
     }
 }

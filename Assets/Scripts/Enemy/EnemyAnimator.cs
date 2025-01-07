@@ -20,8 +20,7 @@ public class EnemyAnimator : MonoBehaviour
         _animator.SetTrigger(name);
     }
 
-    public string AnimationRun => "isRun";
-    public string AnimationAttack => "isAttack";
-    public string AnimationHit => "isHit";
-
+    public string Run => nameof(Run);
+    public string Attack => nameof(Attack);
+    public string Hit => nameof(Hit);
 }

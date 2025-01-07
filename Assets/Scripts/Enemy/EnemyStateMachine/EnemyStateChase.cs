@@ -10,18 +10,18 @@ public class EnemyStateChase : EnemyState
     private float _height;
     private string _animation;
 
-    public EnemyStateChase(Enemy enemy, Player player, PursueArea area) : base(enemy)
+    public EnemyStateChase(Enemy enemy, IStateMachine stateMachine, Player player, PursueArea area) : base(enemy, stateMachine)
     {
         _player = player;
-        _height = _enemy.transform.position.y;
+        _height = Enemy.transform.position.y;
         _pointA = area.PointA;
         _pointB = area.PointB;
-        _animation = _enemy.Animator.AnimationRun;
+        _animation = Enemy.Animator.Run;
     }
 
     public override void Enter()
     {
-        _enemy.Animator.PlayAnimation(_animation, true);
+        Enemy.Animator.PlayAnimation(_animation, true);
     }
 
     public override void Update()
@@ -31,20 +31,20 @@ public class EnemyStateChase : EnemyState
 
     public override void Exit()
     {
-        _enemy.Animator.PlayAnimation(_animation, false);
+        Enemy.Animator.PlayAnimation(_animation, false);
     }
 
     private void Move()
     {
         if (IsNotStopPoint())
         {
-            _enemy.transform.position = Vector2.MoveTowards(_enemy.transform.position, _player.transform.position, _speed * Time.deltaTime);
-            _enemy.transform.position = new Vector2(_enemy.transform.position.x, _height);
+            Enemy.transform.position = Vector2.MoveTowards(Enemy.transform.position, _player.transform.position, _speed * Time.deltaTime);
+            Enemy.transform.position = new Vector2(Enemy.transform.position.x, _height);
         }
     }
 
     private bool IsNotStopPoint()
     {
-        return _enemy.transform.position.x > _pointA.position.x && _enemy.transform.position.x < _pointB.position.x;
+        return Enemy.transform.position.x > _pointA.position.x && Enemy.transform.position.x < _pointB.position.x;
     }
 }
