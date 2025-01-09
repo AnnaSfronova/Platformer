@@ -21,15 +21,14 @@ public class HealthBar : MonoBehaviour
     private void OnDisable()
     {
         _health.Changed -= PrintHealth;
-        _coroutine = null;
     }
 
-    protected void PrintHealth(int health)
+    private void PrintHealth(float health)
     {
         SetCoroutine(health);
     }
 
-    private void SetCoroutine(int health)
+    private void SetCoroutine(float health)
     {
         if (_coroutine != null)
         {
@@ -41,7 +40,7 @@ public class HealthBar : MonoBehaviour
             _coroutine = StartCoroutine(PrintHealthSmooth(health));
     }
 
-    private IEnumerator PrintHealthSmooth(int health)
+    private IEnumerator PrintHealthSmooth(float health)
     {
         while (_slider.value != health)
         {

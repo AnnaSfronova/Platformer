@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour
     private float _previousPosition;
 
     public EnemyAnimator Animator => _animator;
+    public Health Health => _health;
 
     private void Awake()
     {
@@ -26,13 +27,13 @@ public class Enemy : MonoBehaviour
         _health.Changed -= Die;
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
-        Animator.PlayTriggerAnimation(Animator.Hit);
+        Animator.PlayHit();
         _health.TakeDamage(damage);
     }
 
-    private void Die(int health)
+    private void Die(float health)
     {
         if (health <= 0)
             gameObject.SetActive(false);

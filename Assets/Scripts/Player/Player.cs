@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Windows;
 
 [RequireComponent(typeof(InputReader))]
 [RequireComponent(typeof(PlayerMover))]
@@ -28,7 +27,7 @@ public class Player : MonoBehaviour
         _health.Changed -= Die;
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         _animator.PlayHit();
         _health.TakeDamage(damage);
@@ -45,7 +44,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void Die(int health)
+    private void Die(float health)
     {
         if (health <= 0)
             gameObject.SetActive(false);

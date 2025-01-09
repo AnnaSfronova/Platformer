@@ -3,19 +3,19 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] private int _maxValue;
+    [SerializeField] private float _maxValue;
 
-    public event Action<int> Changed;
+    public event Action<float> Changed;
 
-    public int Value { get; private set; }
-    public int MaxValue => _maxValue;
+    public float Value { get; private set; }
+    public float MaxValue => _maxValue;
 
     private void Awake()
     {
         Value = _maxValue;
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         if (damage < 0)
             return;
@@ -24,7 +24,7 @@ public class Health : MonoBehaviour
         Changed?.Invoke(Value);
     }
 
-    public void TakeHeal(int heal)
+    public void TakeHealth(float heal)
     {
         if (heal < 0)
             return;

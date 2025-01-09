@@ -12,8 +12,7 @@ public class PlayerAnimator : MonoBehaviour
 
     private Animator _animator;
     private InputReader _input;
-    private CollisionChecker _checker;
-    
+    private CollisionChecker _checker;    
 
     private void Awake()
     {
