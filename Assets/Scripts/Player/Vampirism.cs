@@ -48,7 +48,7 @@ public class Vampirism : MonoBehaviour
     {
         if (_coroutine != null && _isAvailable)
         {
-            StopCoroutine(ActivateAbility());
+            StopCoroutine(_coroutine);
             _coroutine = null;
         }
 
